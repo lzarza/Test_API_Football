@@ -19,7 +19,7 @@ public interface ITeamService {
 	 * Get all active teams
 	 * @return
 	 */
-	List<TeamDTO> getAllActive();
+	List<TeamDTO> getAllActive(Integer page, Integer size, String sort);
 
 	/**
 	 * Add a player to a team
@@ -62,5 +62,7 @@ public interface ITeamService {
 	 * @throws ServiceException if id is null or team is not found
 	 */
 	boolean disableTeam(Long teamId) throws ServiceException;
+
+	
 
 }

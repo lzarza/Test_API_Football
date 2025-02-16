@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lzarza.test.teammanager.controllers.ITeamController;
@@ -35,8 +36,9 @@ public class TeamController implements ITeamController {
 	 */
 	@Override
 	@GetMapping
-	public ResponseEntity<Object> getAllTeams(){
-		return ResponseEntity.ok(teamService.getAllActive());
+	public ResponseEntity<Object> getAllTeams(@RequestParam Integer page, @RequestParam Integer size, @RequestParam(required=false) String sort){
+		if(page.intValue()<0 || size.intValue()<1) return ResponseEntity.badRequest().body("invalid pagging data");
+		return ResponseEntity.ok(teamService.getAllActive(page,size,sort));
 	}
 	
 	/**

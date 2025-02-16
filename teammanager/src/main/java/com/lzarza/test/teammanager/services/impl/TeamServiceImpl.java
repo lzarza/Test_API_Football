@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -46,9 +49,16 @@ public class TeamServiceImpl implements ITeamService {
 	}
 	
 	@Override
-	public List<TeamDTO> getAllActive(){
+	public List<TeamDTO> getAllActive(Integer page, Integer size, String sort){
 		List<TeamDTO> result = new ArrayList<TeamDTO>();
-		List<Team> teams = teamRepository.findByActiveTrue();
+		
+		Pageable pagging = getTeamPageable(page, size, sort);
+		List<Team> teams = null;
+		if(pagging == null) {
+			teams = teamRepository.findByActiveTrue();
+		}else {
+			teams = teamRepository.findByActiveTrue(pagging);
+		}
 		for(Team team : teams) {
 			result.add(mapTeam(team));
 		}
@@ -88,7 +98,15 @@ public class TeamServiceImpl implements ITeamService {
 		}
 		Team toSave = modelMapper.map(base, Team.class);
 		toSave = teamRepository.save(toSave);
-		return mapTeam(toSave);
+		//At creation a team may have some players inside
+		if(!CollectionUtils.isEmpty(base.getPlayers())){
+			for(PlayerDTO player : base.getPlayers()) {
+				addPlayer(toSave.getTeamId(), player.getPlayerId());
+			}
+		}
+		
+		//force reload to have a result compliant to database
+		return this.findById(toSave.getTeamId());
 	}
 	
 	@Override
@@ -141,6 +159,22 @@ public class TeamServiceImpl implements ITeamService {
 		if(id == null) {
 			throw new ServiceException(errorCode);
 		}
+	}
+	
+	private Pageable getTeamPageable(Integer number, Integer size, String sortColumn) {
+		Pageable result = null;
+		Sort sorting = null;
+		if(sortColumn != null) {
+			sorting = Sort.by(sortColumn);
+		}
+		if(number != null && size != null) {
+			if(sorting == null) {
+				result = PageRequest.of(number.intValue(), size.intValue());
+			}else {
+				result = PageRequest.of(number.intValue(), size.intValue(), sorting);
+			}
+		}
+		return result;
 	}
 	
 	/**

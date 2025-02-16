@@ -13,13 +13,6 @@ import com.lzarza.test.teammanager.dto.TeamDTO;
 public interface ITeamController {
 
 	/**
-	 * Get the list of the active teams
-	 * @return the list of the active teams
-	 * ApiResponses(code=200 message="OK")
-	 */
-	ResponseEntity<Object> getAllTeams();
-
-	/**
 	 * Return a team based on its id
 	 * @param teamId
 	 * @return the id found
@@ -79,5 +72,12 @@ public interface ITeamController {
 	 * ApiResponses(code=422 message="team or player not found")
 	 */
 	ResponseEntity<Object> removeTeamPlayer(Long teamId, Long playerId);
+
+	/**
+	 * Get the list of the active teams
+	 * @return the list of the active teams
+	 * ApiResponses(code=200 message="OK")
+	 */
+	ResponseEntity<Object> getAllTeams(Integer page, Integer size, String sort);
 
 }
