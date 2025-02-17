@@ -1,4 +1,4 @@
-package com.lzarza.test.teammanager.controllers.impl;
+package com.lzarza.test.teammanager.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;

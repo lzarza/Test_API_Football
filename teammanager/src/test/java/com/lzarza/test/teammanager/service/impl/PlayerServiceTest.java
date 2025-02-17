@@ -1,4 +1,4 @@
-package com.lzarza.test.teammanager.controllers.impl;
+package com.lzarza.test.teammanager.service.impl;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
