@@ -34,7 +34,7 @@ public class Player {
 	private Team playerTeam;
 	
 	@Column(name="ACTIVE")
-	private boolean isActive;
+	private boolean active;
 	
 	public Long getPlayerId() {
 		return playerId;
@@ -77,11 +77,11 @@ public class Player {
 	}
 
 	public boolean isActive() {
-		return isActive;
+		return active;
 	}
 
 	public void setActive(boolean isActive) {
-		this.isActive = isActive;
+		this.active = isActive;
 	}
 
 	@Override

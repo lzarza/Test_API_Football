@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.lzarza.test.teammanager.Comparators;
 import com.lzarza.test.teammanager.DataGenerator;
 import com.lzarza.test.teammanager.data.Player;
 import com.lzarza.test.teammanager.data.Team;
@@ -47,40 +48,40 @@ public class PlayerServiceTest {
 	@Test
 	void testGetAll() {
 		List<Player> players = new ArrayList<Player>();
-		players.add(DataGenerator.generatePlayer(1L, "Quincini", 100, "MILIEU"));
-		players.add(DataGenerator.generatePlayer(2L, "Testino", 150, "GARDIEN"));
-		players.add(DataGenerator.generatePlayer(3L, "Mandoli", 200, "ATTAQUANT"));
+		players.add(DataGenerator.generatePlayer(1L, "Quincini", 100d, "MILIEU"));
+		players.add(DataGenerator.generatePlayer(2L, "Testino", 150d, "GARDIEN"));
+		players.add(DataGenerator.generatePlayer(3L, "Mandoli", 200d, "ATTAQUANT"));
 		when(playerRepository.findByActiveTrue()).thenReturn(players);
 		List<PlayerDTO> result = playerService.getActivePlayers();
 		assertEquals(players.size(), result.size());
 		for(Player p : players) {
 			PlayerDTO pResult = result.stream().filter(dto -> dto.getPlayerId().equals(p.getPlayerId())).findFirst().orElse(null);
 			assertNotNull(result);
-			compareDOToDTOs(p, pResult, true);
+			Comparators.comparePlayerToPlayerDTO(p, pResult, true);
 		}
 	}
 	
 	@Test
 	void getById() throws ServiceException {
-		Player p = DataGenerator.generatePlayer(1L, "Quincini", 100, "MILIEU");
+		Player p = DataGenerator.generatePlayer(1L, "Quincini", 100d, "MILIEU");
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		PlayerDTO result = playerService.getById(1L);
-		compareDOToDTOs(p, result, true);
+		Comparators.comparePlayerToPlayerDTO(p, result, true);
 	}
 	
 	@Test
 	void getByIdWithTeam() throws ServiceException {
-		Player p = DataGenerator.generatePlayer(1L, "Quincini", 100, "MILIEU");
-		Team team = DataGenerator.generateTeam(1L, "Test", "TST", 0);
+		Player p = DataGenerator.generatePlayer(1L, "Quincini", 100d, "MILIEU");
+		Team team = DataGenerator.generateTeam(1L, "Test", "TST", 0d);
 		p.setPlayerTeam(team);
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		PlayerDTO result = playerService.getById(1L);
-		compareDOToDTOs(p, result, true);
+		Comparators.comparePlayerToPlayerDTO(p, result, true);
 	}
 	
 	@Test
 	void getById_ErrorIdNull() {
-		Player p = DataGenerator.generatePlayer(1L, "Quincini", 100, "MILIEU");
+		Player p = DataGenerator.generatePlayer(1L, "Quincini", 100d, "MILIEU");
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		try {
 			playerService.getById(null);
@@ -93,14 +94,14 @@ public class PlayerServiceTest {
 	
 	@Test
 	void createPlayer() throws ServiceException {
-		PlayerDTO test = DataGenerator.generatePlayerDTO(null, "Quincini", 100, "MILIEU");
+		PlayerDTO test = DataGenerator.generatePlayerDTO(null, "Quincini", 100d, "MILIEU");
 		PlayerDTO result = playerService.createPlayer(test);
-		compareDTOs(test, result, false);
+		Comparators.comparePlayerDTOs(test, result, false);
 	}
 	
 	@Test
 	void createPlayer_ErrorId() {
-		PlayerDTO test = DataGenerator.generatePlayerDTO(1L, "Quincini", 100, "MILIEU");
+		PlayerDTO test = DataGenerator.generatePlayerDTO(1L, "Quincini", 100d, "MILIEU");
 		try {
 			playerService.createPlayer(test);
 		} catch (ServiceException e) {
@@ -112,17 +113,17 @@ public class PlayerServiceTest {
 	
 	@Test
 	void updatePlayer() throws ServiceException {
-		PlayerDTO test = DataGenerator.generatePlayerDTO(1L, "Quincini", 100, "MILIEU");
-		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200, "Attaquant");
+		PlayerDTO test = DataGenerator.generatePlayerDTO(1L, "Quincini", 100d, "MILIEU");
+		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200d, "Attaquant");
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		PlayerDTO result = playerService.updatePlayer(test);
-		compareDTOs(test, result, true);
+		Comparators.comparePlayerDTOs(test, result, true);
 	}
 	
 	@Test
 	void updatePlayer_ErrorId() {
-		PlayerDTO test = DataGenerator.generatePlayerDTO(null, "Quincini", 100, "MILIEU");
-		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200, "Attaquant");
+		PlayerDTO test = DataGenerator.generatePlayerDTO(null, "Quincini", 100d, "MILIEU");
+		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200d, "Attaquant");
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		try {
 			playerService.updatePlayer(test);
@@ -136,7 +137,7 @@ public class PlayerServiceTest {
 	
 	@Test
 	void updatePlayer_NotFound() {
-		PlayerDTO test = DataGenerator.generatePlayerDTO(1L, "Quincini", 100, "MILIEU");
+		PlayerDTO test = DataGenerator.generatePlayerDTO(1L, "Quincini", 100d, "MILIEU");
 		when(playerRepository.findById(any())).thenReturn(Optional.empty());
 		try {
 			playerService.updatePlayer(test);
@@ -149,7 +150,7 @@ public class PlayerServiceTest {
 	
 	@Test
 	void disablePlayer() throws ServiceException {
-		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200, "Attaquant");
+		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200d, "Attaquant");
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		playerService.disablePlayer(1L);
 		assertFalse(p.isActive());
@@ -157,7 +158,7 @@ public class PlayerServiceTest {
 	
 	@Test
 	void disablePlayer_ErrorId() {
-		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200, "Attaquant");
+		Player p = DataGenerator.generatePlayer(1L, "Mandoli", 200d, "Attaquant");
 		when(playerRepository.findById(any())).thenReturn(Optional.of(p));
 		try {
 			playerService.disablePlayer(null);
@@ -180,29 +181,5 @@ public class PlayerServiceTest {
 		fail("No exception");
 	}
 	
-	private void compareDTOs(PlayerDTO expected, PlayerDTO result, boolean compareIds) {
-		assertNotNull(result);
-		if(compareIds) {
-			assertEquals(expected.getPlayerId(), result.getPlayerId());
-		}
-		assertEquals(expected.getName(), result.getName());
-		assertEquals(expected.getPlayerBudget(), result.getPlayerBudget());
-		assertEquals(expected.getPosition(), result.getPosition());
-		assertEquals(expected.getTeamAcronym(), result.getTeamAcronym());
-	}
 	
-	private void compareDOToDTOs(Player expected, PlayerDTO result, boolean compareIds) {
-		assertNotNull(result);
-		if(compareIds) {
-			assertEquals(expected.getPlayerId(), result.getPlayerId());
-		}
-		assertEquals(expected.getName(), result.getName());
-		assertEquals(expected.getPlayerBudget(), result.getPlayerBudget());
-		assertEquals(expected.getPosition(), result.getPosition());
-		if(expected.getPlayerTeam() != null) {
-			assertEquals(expected.getPlayerTeam().getAcronym(), result.getTeamAcronym());
-		}else {
-			assertNull(result.getTeamAcronym());
-		}
-	}
 }

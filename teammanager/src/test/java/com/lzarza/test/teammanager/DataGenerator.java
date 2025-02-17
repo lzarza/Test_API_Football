@@ -14,31 +14,31 @@ public class DataGenerator {
 	
 	public static EasyRandom generator = new EasyRandom();
 
-	public static Player generatePlayer(Long id, String name, double budget, String position) {
+	public static Player generatePlayer(Long id, String name, Double budget, String position) {
 		Player result = new Player();
 		result.setPlayerId(id);
 		result.setName(name);
-		result.setPlayerBudget(BigDecimal.valueOf(budget));
+		result.setPlayerBudget(budget != null ? BigDecimal.valueOf(budget) : null);
 		result.setPosition(position);
 		result.setActive(true);
 		return result;
 	}
 	
-	public static PlayerDTO generatePlayerDTO(Long id, String name, double budget, String position) {
+	public static PlayerDTO generatePlayerDTO(Long id, String name, Double budget, String position) {
 		PlayerDTO result = new PlayerDTO();
 		result.setPlayerId(id);
 		result.setName(name);
-		result.setPlayerBudget(BigDecimal.valueOf(budget));
+		result.setPlayerBudget(budget != null ? BigDecimal.valueOf(budget) : null);
 		result.setPosition(position);
 		return result;
 	}
 	
-	public static Team generateTeam(Long id, String name, String acronym, double budget, Player...players) {
+	public static Team generateTeam(Long id, String name, String acronym, Double budget, Player...players) {
 		Team result = new Team();
 		result.setTeamId(id);
 		result.setAcronym(acronym);
 		result.setName(name);
-		result.setTeamBudget(BigDecimal.valueOf(budget));
+		result.setTeamBudget(budget != null ? BigDecimal.valueOf(budget) : null);
 		result.setPlayers(Arrays.asList(players));
 		for(Player teamPlayer : result.getPlayers()) {
 			teamPlayer.setPlayerTeam(result);
@@ -47,12 +47,12 @@ public class DataGenerator {
 		return result;
 	}
 	
-	public static TeamDTO generateTeamDTO(Long id, String name, String acronym, double budget, PlayerDTO...players) {
+	public static TeamDTO generateTeamDTO(Long id, String name, String acronym, Double budget, PlayerDTO...players) {
 		TeamDTO result = new TeamDTO();
 		result.setTeamId(id);
 		result.setAcronym(acronym);
 		result.setName(name);
-		result.setTeamBudget(BigDecimal.valueOf(budget));
+		result.setTeamBudget(budget != null ? BigDecimal.valueOf(budget) : null);
 		result.setPlayers(Arrays.asList(players));
 		return result;
 	}

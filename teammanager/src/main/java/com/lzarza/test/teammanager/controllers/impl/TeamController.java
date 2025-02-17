@@ -192,7 +192,7 @@ public class TeamController implements ITeamController {
 				!StringUtils.hasLength(toCheck.getAcronym()) ||
 				!StringUtils.hasLength(toCheck.getName()) ||
 				toCheck.getTeamBudget() == null ||
-				toCheck.getTeamBudget().compareTo(BigDecimal.ZERO) >= 1 || //team budget must be positive
+				toCheck.getTeamBudget().compareTo(BigDecimal.ZERO) < 1 || //team budget must be positive
 				(checkId && (toCheck.getTeamId() == null || toCheck.getTeamId() <= 0)); //id not null and superior to 0
 	}
 }
