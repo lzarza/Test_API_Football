@@ -47,6 +47,7 @@ public class PlayerServiceImpl implements IPlayerService {
 			throw new ServiceException(ServiceException.CANNOT_CREATE_PLAYER);
 		}
 		Player entity = modelMapper.map(player, Player.class);
+		entity.setActive(true);
 		entity = playerRepository.save(entity);
 		return mapPlayer(entity);
 	}

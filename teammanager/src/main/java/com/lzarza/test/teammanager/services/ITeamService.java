@@ -25,19 +25,17 @@ public interface ITeamService {
 	 * Add a player to a team
 	 * @param teamId
 	 * @param playerId
-	 * @return
 	 * @throws ServiceException if one id is null and if a data is not found
 	 */
-	TeamDTO addPlayer(Long teamId, Long playerId) throws ServiceException;
+	void addPlayer(Long teamId, Long playerId) throws ServiceException;
 
 	/**
 	 * Remove a player from the team
 	 * @param teamId
 	 * @param playerId
-	 * @return
 	 * @throws ServiceException if one id is null and if a data is not foun
 	 */
-	TeamDTO removePlayer(Long teamId, Long playerId) throws ServiceException;
+	void removePlayer(Long teamId, Long playerId) throws ServiceException;
 
 	/**
 	 * Create a team

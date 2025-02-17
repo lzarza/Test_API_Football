@@ -66,47 +66,35 @@ public class TeamServiceImpl implements ITeamService {
 	}
 	
 	@Override
-	public TeamDTO addPlayer(Long teamId, Long playerId) throws ServiceException {
+	public void addPlayer(Long teamId, Long playerId) throws ServiceException {
 		verifyId(teamId, ServiceException.MISSING_TEAM_ID);
-		verifyId(playerId, "Cannot find player without id");
+		verifyId(playerId, ServiceException.MISSING_PLAYER_ID);
 		Team team = getTeamById(teamId);
 		Player player = getPlayerById(playerId);
 		player.setPlayerTeam(team);
 		playerRepository.save(player);
-		//reload team since player is associated to be sure change is done
-		return mapTeam(getTeamById(teamId));
 	}
 	
 	@Override
-	public TeamDTO removePlayer(Long teamId, Long playerId) throws ServiceException {
+	public void removePlayer(Long teamId, Long playerId) throws ServiceException {
 		verifyId(teamId, ServiceException.MISSING_TEAM_ID);
-		verifyId(playerId, "Cannot find player without id");
+		verifyId(playerId, ServiceException.MISSING_PLAYER_ID);
 		Player player = getPlayerById(playerId);
 		if(player.getPlayerTeam() != null && player.getPlayerTeam().getTeamId().equals(teamId)) {
 			player.setPlayerTeam(null);
 		}
 		playerRepository.save(player);
-		//reload team since player is no more associated to be sure change is done
-		return mapTeam(getTeamById(teamId));
 	}
 	
 	@Override
 	public TeamDTO createTeam(TeamDTO base) throws ServiceException {
 		verifyTeam(base,false);
 		if(base.getTeamId() != null) {
-			throw new IllegalArgumentException("cannot create a team with an id");
+			throw new ServiceException(ServiceException.CANNOT_CREATE_TEAM);
 		}
 		Team toSave = modelMapper.map(base, Team.class);
-		toSave = teamRepository.save(toSave);
-		//At creation a team may have some players inside
-		if(!CollectionUtils.isEmpty(base.getPlayers())){
-			for(PlayerDTO player : base.getPlayers()) {
-				addPlayer(toSave.getTeamId(), player.getPlayerId());
-			}
-		}
-		
-		//force reload to have a result compliant to database
-		return this.findById(toSave.getTeamId());
+		toSave.setActive(true);
+		return mapTeam(teamRepository.save(toSave));
 	}
 	
 	@Override
@@ -186,6 +174,7 @@ public class TeamServiceImpl implements ITeamService {
 	private Team getTeamById(Long teamId) throws ServiceException {
 		Optional<Team> dbTeam = teamRepository.findById(teamId);
 		if(dbTeam.isEmpty()) {
+			logger.error("team not found : " + teamId);
 			throw new ServiceException(ServiceException.TEAM_NOT_FOUND);
 		}
 		return dbTeam.get();
@@ -200,6 +189,7 @@ public class TeamServiceImpl implements ITeamService {
 	private Player getPlayerById(Long playerId) throws ServiceException {
 		Optional<Player> dbPlayer = playerRepository.findById(playerId);
 		if(dbPlayer.isEmpty()) {
+			logger.error("player not found : " + playerId);
 			throw new ServiceException(ServiceException.PLAYER_NOT_FOUND);
 		}
 		return dbPlayer.get();

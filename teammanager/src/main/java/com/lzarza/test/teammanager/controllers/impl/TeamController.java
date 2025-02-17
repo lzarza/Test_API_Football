@@ -3,6 +3,7 @@ package com.lzarza.test.teammanager.controllers.impl;
 import java.math.BigDecimal;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lzarza.test.teammanager.controllers.ITeamController;
+import com.lzarza.test.teammanager.dto.PlayerDTO;
 import com.lzarza.test.teammanager.dto.TeamDTO;
 import com.lzarza.test.teammanager.exception.ServiceException;
 import com.lzarza.test.teammanager.services.ITeamService;
@@ -78,6 +80,14 @@ public class TeamController implements ITeamController {
 		TeamDTO result = null;
 		try {
 			result = teamService.createTeam(team);
+			//add players
+			if(!CollectionUtils.isEmpty(team.getPlayers())) {
+				for(PlayerDTO player : team.getPlayers()) {
+					teamService.addPlayer(result.getTeamId(), player.getPlayerId());
+				}
+				//reload to have player list in result
+				result = teamService.findById(result.getTeamId());
+			}
 		} catch (ServiceException e) {
 			return ServiceExceptionHandler.exceptionToResponse(e);
 		}
@@ -140,7 +150,8 @@ public class TeamController implements ITeamController {
 		if(teamId == null || playerId == null) return ResponseEntity.badRequest().body("team id required");
 		TeamDTO result = null;
 		try {
-			result = teamService.addPlayer(teamId, playerId);
+			teamService.addPlayer(teamId, playerId);
+			result = teamService.findById(teamId);
 		} catch (ServiceException e) {
 			return ServiceExceptionHandler.exceptionToResponse(e);
 		}
@@ -162,7 +173,8 @@ public class TeamController implements ITeamController {
 		if(teamId == null || playerId == null) return ResponseEntity.badRequest().body("team id required");
 		TeamDTO result = null;
 		try {
-			result = teamService.removePlayer(teamId, playerId);
+			teamService.removePlayer(teamId, playerId);
+			result = teamService.findById(teamId);
 		} catch (ServiceException e) {
 			return ServiceExceptionHandler.exceptionToResponse(e);
 		}
