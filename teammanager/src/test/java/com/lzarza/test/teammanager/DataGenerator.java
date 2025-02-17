@@ -14,7 +14,7 @@ public class DataGenerator {
 	
 	public static EasyRandom generator = new EasyRandom();
 
-	public static Player generatePlayer(long id, String name, double budget, String position) {
+	public static Player generatePlayer(Long id, String name, double budget, String position) {
 		Player result = new Player();
 		result.setPlayerId(id);
 		result.setName(name);
@@ -24,7 +24,7 @@ public class DataGenerator {
 		return result;
 	}
 	
-	public static PlayerDTO generatePlayerDTO(long id, String name, double budget, String position) {
+	public static PlayerDTO generatePlayerDTO(Long id, String name, double budget, String position) {
 		PlayerDTO result = new PlayerDTO();
 		result.setPlayerId(id);
 		result.setName(name);
