@@ -28,7 +28,7 @@ public class Team {
 	private String acronym;
 	
 	@Column(name="BUDGET")
-	private BigDecimal teamBudget;
+	private BigDecimal budget;
 	
 	@OneToMany(mappedBy = "playerTeam", fetch = FetchType.EAGER)
 	private List<Player> players;
@@ -61,11 +61,11 @@ public class Team {
 	}
 
 	public BigDecimal getTeamBudget() {
-		return teamBudget;
+		return budget;
 	}
 
 	public void setTeamBudget(BigDecimal teamBudget) {
-		this.teamBudget = teamBudget;
+		this.budget = teamBudget;
 	}
 
 	public List<Player> getPlayers() {

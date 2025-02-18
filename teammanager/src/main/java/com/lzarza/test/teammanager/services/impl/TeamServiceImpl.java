@@ -118,6 +118,7 @@ public class TeamServiceImpl implements ITeamService {
 			player.setPlayerTeam(null);
 			playerRepository.save(player);
 		}
+		teamRepository.save(toChange);
 		return true;
 	}
 	
