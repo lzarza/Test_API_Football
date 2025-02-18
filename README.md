@@ -26,3 +26,4 @@ The aim is to be able to manage a football club team
 - The base topic was only on team management but it feels incomplete so i added the possibility to manage players too
 - delete methods don't delete since this is not something to put in all hands. The teams and players are not deleted but disabled. Still available through their id but lists won't bring them.
 - Both controllers follow the REST directives to be able to perform CRUD operations.
+- Since budgets are monetary and Java doesn't manage correctly this king of data, though double or float, I had to use BigDecimal.
