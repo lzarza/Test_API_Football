@@ -34,12 +34,8 @@ public class TeamControllerTestIT {
 	
 	ModelMapper mapper = new ModelMapper();
 	
-	private Team t1;
-	private Team t2;
-	private Team t3;
-	private Player p1;
-	private Player p2;
-	private Player p3;
+	private Team t1, t2, t3;
+	private Player p1, p2, p3;
 	
 	@BeforeEach
 	void setUp() throws Exception {
