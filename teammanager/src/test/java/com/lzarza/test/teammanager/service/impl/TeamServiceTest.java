@@ -10,17 +10,14 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.modelmapper.ModelMapper;
 
 import com.lzarza.test.teammanager.Comparators;
 import com.lzarza.test.teammanager.DataGenerator;
 import com.lzarza.test.teammanager.data.Player;
 import com.lzarza.test.teammanager.data.Team;
-import com.lzarza.test.teammanager.dto.PlayerDTO;
 import com.lzarza.test.teammanager.dto.TeamDTO;
 import com.lzarza.test.teammanager.exception.ServiceException;
 import com.lzarza.test.teammanager.repository.PlayerRepository;
@@ -28,7 +25,6 @@ import com.lzarza.test.teammanager.repository.TeamRepository;
 import com.lzarza.test.teammanager.services.ITeamService;
 import com.lzarza.test.teammanager.services.impl.TeamServiceImpl;
 
-@RunWith(MockitoJUnitRunner.class)
 class TeamServiceTest {
 
 	@Mock

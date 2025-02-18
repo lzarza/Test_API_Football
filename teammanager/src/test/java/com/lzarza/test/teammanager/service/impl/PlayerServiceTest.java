@@ -1,8 +1,7 @@
 package com.lzarza.test.teammanager.service.impl;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,10 +13,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.lzarza.test.teammanager.Comparators;
 import com.lzarza.test.teammanager.DataGenerator;
@@ -29,7 +26,6 @@ import com.lzarza.test.teammanager.repository.PlayerRepository;
 import com.lzarza.test.teammanager.services.IPlayerService;
 import com.lzarza.test.teammanager.services.impl.PlayerServiceImpl;
 
-@RunWith(MockitoJUnitRunner.class)
 public class PlayerServiceTest {
 	
 	@Mock
